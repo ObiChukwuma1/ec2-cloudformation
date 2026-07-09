@@ -1,15 +1,15 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
-Description: Deploy a simple Amazon Linux 2023 EC2 instance
+Description: Deploy a simple EC2 instance using Amazon Linux 2023
 
 Parameters:
 
   InstanceType:
     Type: String
-    Default: t2.micro
+    Default: t3.micro
     AllowedValues:
-      - t2.micro
       - t3.micro
+      - t3.small
 
   LatestAmiId:
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
