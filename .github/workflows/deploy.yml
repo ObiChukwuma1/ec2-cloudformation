@@ -14,10 +14,13 @@ env:
   STACK_NAME: ec2-demo
 
 jobs:
+
   deploy:
+
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -27,7 +30,7 @@ jobs:
           role-to-assume: arn:aws:iam::544253493985:role/GitHubActionsCloudFormationRole
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Validate CloudFormation Template
+      - name: Validate CloudFormation
         run: |
           aws cloudformation validate-template \
             --template-body file://template.yaml
@@ -37,10 +40,12 @@ jobs:
           aws cloudformation deploy \
             --stack-name $STACK_NAME \
             --template-file template.yaml \
-            --capabilities CAPABILITY_NAMED_IAM
+            --parameter-overrides \
+              InstanceType=t2.micro \
+            --capabilities CAPABILITY_NAMED_IAM \
+            --no-fail-on-empty-changeset
 
-      - name: Display Stack Outputs
+      - name: Show Stack Outputs
         run: |
           aws cloudformation describe-stacks \
-            --stack-name $STACK_NAME \
-            --query "Stacks[0].Outputs"
+            --stack-name $STACK_NAME
